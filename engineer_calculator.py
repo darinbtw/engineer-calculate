@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from math import sin, cos, tan, log10, log, exp, sqrt
 
 class Calculator:
     def __init__(self, master):
@@ -12,9 +13,17 @@ class Calculator:
         master.columnconfigure(0, weight=1)
         master.rowconfigure(0, weight=1)
         master.bind('<Key>', self.process_the_button)
+        self.point_entered = False  # Флаг для отслеживания ввода точки
 
     def checking_the_drive(self, symbols):
-        allowed_characters = set("0123456789+-*/.C←=sqrtsincostanlnlog10exp")
+        allowed_characters = set("0123456789+-*/C←=sqrtsincostanlnlog10exp")
+        point_count = symbols.count('.')
+        # Если точка уже введена и пытаются ввести еще раз, возвращаем False
+        if self.point_entered and point_count > 0:
+            return False
+        # Если точка еще не введена, обновляем флаг
+        if point_count == 0:
+            self.point_entered = False
         return all(c in allowed_characters for c in symbols)
 
     def create_button(self, master):
@@ -40,7 +49,7 @@ class Calculator:
 
     def the_button_is_pressed(self, meaning):
         if meaning == '=':
-            self.calcualate1()
+            self.calculate()
         elif meaning in ('C', 'c'):
             self.clear_input()
         elif meaning == '<-':
@@ -57,15 +66,17 @@ class Calculator:
             return
         self.the_button_is_pressed(key)
 
-    def calcualate1(self):
+    def calculate(self):
         try:
-            meaning = self.input.get()
-            meaning = meaning.replace('ln', 'log')
-            meaning = meaning.replace('log10', 'log10')
-            meaning = meaning.replace('exp', 'exp')
-            score = str(eval(meaning))
+            expression = self.input.get()
+            expression = expression.replace('ln', 'log')
+            expression = expression.replace('log10', 'log10')
+            expression = expression.replace('exp', 'exp')
+            result = str(eval(expression))
             self.clear_input()
-            self.add_in_input(str(score))
+            self.add_in_input(str(result))
+            # После успешного вычисления сбрасываем флаг точки
+            self.point_entered = False
         except Exception as e:
             self.clear_input()
             self.add_in_input("Error")
@@ -78,6 +89,9 @@ class Calculator:
 
     def add_to_input(self, meaning):
         current = self.input.get()
+        if meaning == '.':
+            # Если вводится точка, обновляем флаг
+            self.point_entered = True
         self.clear_input()
         self.add_in_input(str(current) + str(meaning))
 
