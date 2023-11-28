@@ -7,6 +7,8 @@ def calc(key):
             expression = calc_entry.get()
             # Replace '÷' with '/'
             expression = expression.replace('÷', '/')
+            # Replace 'mod' with '%'
+            expression = expression.replace('mod', '%')
             result = eval(expression)
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
@@ -27,6 +29,18 @@ def calc(key):
             result = math.pow(float(base), float(exponent))
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
+        elif key == '%':
+            # Calculate percentage
+            expression = calc_entry.get()
+            value, percentage = expression.split('%')
+            result = float(value) * float(percentage) / 100
+            calc_entry.delete(0, END)
+            calc_entry.insert(END, str(result))
+        elif key == '.':
+            # Check if there is already a dot in the current input
+            current_text = calc_entry.get()
+            if '.' not in current_text:
+                calc_entry.insert(END, key)
         else:
             # For numeric buttons and other operations, insert them into the entry
             if calc_entry.get() == 'Error':
@@ -67,10 +81,6 @@ def perform_unary_operation(operation, value):
     elif operation == '√':
         return math.sqrt(float(value))
 
-def on_entry_key_press(event):
-    # Suppress key presses in the entry field
-    return 'break'
-
 root = Tk()
 root.title('Инженерный калькулятор')
 root.configure(bg='#CCCCCC')  # Set background color to gray
@@ -78,7 +88,7 @@ root.configure(bg='#CCCCCC')  # Set background color to gray
 # Styling
 style = ttk.Style()
 style.configure("TButton", padding=(10, 5), font=('Arial', 12))
-style.configure("TEntry", font=('Arial', 14))
+style.configure("TEntry", font=('Arial', 14), state='readonly')  # Set entry field state to 'readonly'
 
 # Window Resizing
 for i in range(5):
@@ -92,7 +102,7 @@ btn_list = [
     'cos', 'sin', 'log', 'ln', 'n!',
     'e', 'π', '√', '+', '*',
     '7', '8', '9', '-', '÷',
-    '4', '5', '6', '^', '%',  # Changed 'xⁿ' to '^'
+    '4', '5', '6', '^', '%',  # Replace 'mod' with '%'
     '1', '2', '3', '(', ')',
     '0', '.', '=', '←', 'C'  # Reversed the order
 ]
@@ -100,16 +110,15 @@ btn_list = [
 calc_entry = ttk.Entry(root, width=33)
 calc_entry.grid(row=0, column=0, columnspan=5, sticky=W + E + N + S, pady=10)
 
-# Bind the event handler to key press events in the entry field
-calc_entry.bind('<Key>', on_entry_key_press)
-
 r = 1
 c = 0
 for btn in btn_list:
     rel = ''
     cmd = lambda x=btn: calc(x)
 
-    ttk.Button(root, text=btn, command=cmd).grid(row=r, column=c, pady=5, sticky=W + E + N + S)
+    # Change text for the '%' button
+    text = '%' if btn == '%' else btn
+    ttk.Button(root, text=text, command=cmd).grid(row=r, column=c, pady=5, sticky=W + E + N + S)
     c += 1
     if c > 4:
         c = 0
