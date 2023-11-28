@@ -1,17 +1,8 @@
 from tkinter import Tk, END, messagebox, ttk, W, E, N, S
 import math
-import builtins
 
 def on_entry_key_press(event):
     return 'break'  # Игнорировать ввод с клавиатуры
-
-def secure_eval(expression):
-    # Заменяем eval на безопасную функцию
-    return eval(expression, {'__builtins__': None}, {})
-
-def secure_compile(code):
-    # Компилируем код и возвращаем скомпилированный объект
-    return compile(code, filename='<string>', mode='exec')
 
 def calc(key):
     try:
@@ -19,7 +10,7 @@ def calc(key):
             expression = calc_entry.get()
             expression = expression.replace('÷', '/')
             expression = expression.replace('^', '**')
-            result = secure_eval(expression)
+            result = eval(expression)
             if result == float('inf') or result == float('-inf'):
                 raise OverflowError("Бесконечность")
             calc_entry.delete(0, END)
@@ -45,11 +36,15 @@ def calc(key):
                 calc_entry.insert(END, key)
             elif '.' not in current_text and current_text == '':
                 calc_entry.insert(END, '0' + key)
+        elif key == '^':
+            current_text = calc_entry.get()
+            if current_text.count('^') == 0:
+                calc_entry.insert(END, key)
         else:
             if calc_entry.get() == 'Error':
                 clear_entry()
             calc_entry.insert(END, key)
-    except (ValueError, OverflowError) as e:
+    except Exception as e:
         calc_entry.delete(0, END)
         calc_entry.insert(END, 'Error')
         messagebox.showerror('Error', str(e))
@@ -80,10 +75,6 @@ def perform_unary_operation(operation, value):
         return str(math.pi)
     elif operation == '√':
         return math.sqrt(float(value))
-
-# Блокируем доступ к опасным функциям
-builtins.eval = secure_eval
-builtins.compile = secure_compile
 
 root = Tk()
 root.title('Инженерный калькулятор')
