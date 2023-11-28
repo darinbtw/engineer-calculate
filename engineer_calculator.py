@@ -1,6 +1,9 @@
 from tkinter import Tk, END, messagebox, ttk, W, E, N, S
 import math
 
+def on_entry_key_press(event):
+    return 'break'  # Игнорировать ввод с клавиатуры
+
 def calc(key):
     try:
         if key == '=':
@@ -21,7 +24,8 @@ def calc(key):
             backspace()
         elif key == '%':
             expression = calc_entry.get()
-            result = eval(expression) * 0.01
+            value, percentage = expression.split('-')
+            result = float(value) - (float(value) * float(percentage) / 100)
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
         elif key == '.':
@@ -70,7 +74,7 @@ root.configure(bg='#CCCCCC')  # Задаем цвет фона
 
 style = ttk.Style()
 style.configure("TButton", padding=(10, 5), font=('Arial', 12))
-style.configure("TEntry", font=('Arial', 14), state='readonly')
+style.configure("TEntry", font=('Arial', 14))
 
 for i in range(5):
     root.columnconfigure(i, weight=1)
@@ -89,6 +93,7 @@ btn_list = [
 
 calc_entry = ttk.Entry(root, width=33)
 calc_entry.grid(row=0, column=0, columnspan=5, sticky=W + E + N + S, pady=10)
+calc_entry.bind('<Key>', on_entry_key_press)  # Привязываем событие Key к функции
 
 r = 1
 c = 0
