@@ -6,6 +6,7 @@ def calc(key):
         if key == '=':
             expression = calc_entry.get()
             expression = expression.replace('÷', '/')
+            expression = expression.replace('^', '**')
             result = eval(expression)
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
@@ -18,23 +19,11 @@ def calc(key):
             clear_entry()
         elif key == '←':
             backspace()
-        elif key == '^':
-            expression = calc_entry.get()
-            base, exponent = expression.split('^')
-            result = math.pow(float(base), float(exponent))
-            calc_entry.delete(0, END)
-            calc_entry.insert(END, str(result))
         elif key == '%':
             expression = calc_entry.get()
-            try:
-                result = eval(expression) * 0.01
-                calc_entry.delete(0, END)
-                calc_entry.insert(END, str(result))
-            except Exception as e:
-                calc_entry.delete(0, END)
-                calc_entry.insert(END, 'Error')
-                messagebox.showerror('Error', str(e))
-                clear_entry()
+            result = eval(expression) * 0.01
+            calc_entry.delete(0, END)
+            calc_entry.insert(END, str(result))
         elif key == '.':
             current_text = calc_entry.get()
             if '.' not in current_text:
@@ -43,7 +32,7 @@ def calc(key):
             if calc_entry.get() == 'Error':
                 clear_entry()
             calc_entry.insert(END, key)
-    except (ValueError, ZeroDivisionError, OverflowError) as e:
+    except Exception as e:
         calc_entry.delete(0, END)
         calc_entry.insert(END, 'Error')
         messagebox.showerror('Error', str(e))
@@ -71,7 +60,7 @@ def perform_unary_operation(operation, value):
     elif operation == 'e':
         return str(math.e)
     elif operation == 'π':
-        return str(round(math.pi, 10))
+        return str(math.pi)
     elif operation == '√':
         return math.sqrt(float(value))
 
