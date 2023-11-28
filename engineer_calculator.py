@@ -5,44 +5,41 @@ def calc(key):
     try:
         if key == '=':
             expression = calc_entry.get()
-            # Replace '÷' with '/'
             expression = expression.replace('÷', '/')
-            # Replace 'mod' with '%'
-            expression = expression.replace('mod', '%')
             result = eval(expression)
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
         elif key in {'cos', 'sin', 'log', 'ln', 'n!', 'e', 'π', '√'}:
-            # Unary operations
             expression = calc_entry.get()
             result = perform_unary_operation(key, expression)
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
         elif key == 'C':
             clear_entry()
-        elif key == '←':  # Backspace
+        elif key == '←':
             backspace()
-        elif key == '^':  # Exponentiation
-            # Evaluate exponentiation immediately
+        elif key == '^':
             expression = calc_entry.get()
             base, exponent = expression.split('^')
             result = math.pow(float(base), float(exponent))
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
         elif key == '%':
-            # Calculate percentage
             expression = calc_entry.get()
-            value, percentage = expression.split('%')
-            result = float(value) * float(percentage) / 100
-            calc_entry.delete(0, END)
-            calc_entry.insert(END, str(result))
+            try:
+                result = eval(expression) * 0.01
+                calc_entry.delete(0, END)
+                calc_entry.insert(END, str(result))
+            except Exception as e:
+                calc_entry.delete(0, END)
+                calc_entry.insert(END, 'Error')
+                messagebox.showerror('Error', str(e))
+                clear_entry()
         elif key == '.':
-            # Check if there is already a dot in the current input
             current_text = calc_entry.get()
             if '.' not in current_text:
                 calc_entry.insert(END, key)
         else:
-            # For numeric buttons and other operations, insert them into the entry
             if calc_entry.get() == 'Error':
                 clear_entry()
             calc_entry.insert(END, key)
@@ -50,7 +47,6 @@ def calc(key):
         calc_entry.delete(0, END)
         calc_entry.insert(END, 'Error')
         messagebox.showerror('Error', str(e))
-        # After the user clicks OK, clear the entry
         clear_entry()
 
 def clear_entry():
@@ -63,10 +59,8 @@ def backspace():
 
 def perform_unary_operation(operation, value):
     if operation == 'cos':
-        # Convert degrees to radians
         return math.cos(math.radians(float(value)))
     elif operation == 'sin':
-        # Convert degrees to radians
         return math.sin(math.radians(float(value)))
     elif operation == 'log':
         return math.log10(float(value))
@@ -75,36 +69,33 @@ def perform_unary_operation(operation, value):
     elif operation == 'n!':
         return math.factorial(int(value))
     elif operation == 'e':
-        return str(math.e)  # Convert math.e to string
+        return str(math.e)
     elif operation == 'π':
-        return str(round(math.pi, 10))  # Round to 10 decimal places
+        return str(round(math.pi, 10))
     elif operation == '√':
         return math.sqrt(float(value))
 
 root = Tk()
 root.title('Инженерный калькулятор')
-root.configure(bg='#CCCCCC')  # Set background color to gray
+root.configure(bg='#CCCCCC')  # Задаем цвет фона
 
-# Styling
 style = ttk.Style()
 style.configure("TButton", padding=(10, 5), font=('Arial', 12))
-style.configure("TEntry", font=('Arial', 14), state='readonly')  # Set entry field state to 'readonly'
+style.configure("TEntry", font=('Arial', 14), state='readonly')
 
-# Window Resizing
 for i in range(5):
     root.columnconfigure(i, weight=1)
     root.rowconfigure(i, weight=1)
 
 root.minsize(width=400, height=500)
 
-# Buttons
 btn_list = [
     'cos', 'sin', 'log', 'ln', 'n!',
     'e', 'π', '√', '+', '*',
     '7', '8', '9', '-', '÷',
-    '4', '5', '6', '^', '%',  # Replace 'mod' with '%'
+    '4', '5', '6', '^', '%',
     '1', '2', '3', '(', ')',
-    '0', '.', '=', '←', 'C'  # Reversed the order
+    '0', '.', '=', '←', 'C'
 ]
 
 calc_entry = ttk.Entry(root, width=33)
@@ -116,7 +107,6 @@ for btn in btn_list:
     rel = ''
     cmd = lambda x=btn: calc(x)
 
-    # Change text for the '%' button
     text = '%' if btn == '%' else btn
     ttk.Button(root, text=text, command=cmd).grid(row=r, column=c, pady=5, sticky=W + E + N + S)
     c += 1
