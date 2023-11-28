@@ -17,22 +17,43 @@ def calc(key):
             calc_entry.delete(0, END)
             calc_entry.insert(END, str(result))
         elif key == 'C':
+            clear_entry()
+        elif key == '←':  # Backspace
+            backspace()
+        elif key == '^':  # Exponentiation
+            # Evaluate exponentiation immediately
+            expression = calc_entry.get()
+            base, exponent = expression.split('^')
+            result = math.pow(float(base), float(exponent))
             calc_entry.delete(0, END)
-        elif key == 'Exit':
-            root.after(1, root.destroy)
+            calc_entry.insert(END, str(result))
         else:
-            # For other keys, insert them into the entry
+            # For numeric buttons and other operations, insert them into the entry
+            if calc_entry.get() == 'Error':
+                clear_entry()
             calc_entry.insert(END, key)
     except (ValueError, ZeroDivisionError, OverflowError) as e:
         calc_entry.delete(0, END)
         calc_entry.insert(END, 'Error')
         messagebox.showerror('Error', str(e))
+        # After the user clicks OK, clear the entry
+        clear_entry()
+
+def clear_entry():
+    calc_entry.delete(0, END)
+
+def backspace():
+    current_expression = calc_entry.get()
+    calc_entry.delete(0, END)
+    calc_entry.insert(END, current_expression[:-1])
 
 def perform_unary_operation(operation, value):
     if operation == 'cos':
-        return math.cos(float(value))
+        # Convert degrees to radians
+        return math.cos(math.radians(float(value)))
     elif operation == 'sin':
-        return math.sin(float(value))
+        # Convert degrees to radians
+        return math.sin(math.radians(float(value)))
     elif operation == 'log':
         return math.log10(float(value))
     elif operation == 'ln':
@@ -40,15 +61,19 @@ def perform_unary_operation(operation, value):
     elif operation == 'n!':
         return math.factorial(int(value))
     elif operation == 'e':
-        return math.e
+        return str(math.e)  # Convert math.e to string
     elif operation == 'π':
-        return math.pi
+        return str(round(math.pi, 10))  # Round to 10 decimal places
     elif operation == '√':
         return math.sqrt(float(value))
 
+def on_entry_key_press(event):
+    # Suppress key presses in the entry field
+    return 'break'
+
 root = Tk()
 root.title('Инженерный калькулятор')
-root.configure(bg='#CCCCCC')  #Gray background
+root.configure(bg='#CCCCCC')  # Set background color to gray
 
 # Styling
 style = ttk.Style()
@@ -67,13 +92,16 @@ btn_list = [
     'cos', 'sin', 'log', 'ln', 'n!',
     'e', 'π', '√', '+', '*',
     '7', '8', '9', '-', '÷',
-    '4', '5', '6', 'xⁿ', '%',
+    '4', '5', '6', '^', '%',  # Changed 'xⁿ' to '^'
     '1', '2', '3', '(', ')',
-    '0', '.', '=', 'C', 'Exit'
+    '0', '.', '=', '←', 'C'  # Reversed the order
 ]
 
 calc_entry = ttk.Entry(root, width=33)
 calc_entry.grid(row=0, column=0, columnspan=5, sticky=W + E + N + S, pady=10)
+
+# Bind the event handler to key press events in the entry field
+calc_entry.bind('<Key>', on_entry_key_press)
 
 r = 1
 c = 0
@@ -86,5 +114,5 @@ for btn in btn_list:
     if c > 4:
         c = 0
         r += 1
-#start
+
 root.mainloop()
