@@ -11,10 +11,10 @@ def calc(key):
             expression = expression.replace('÷', '/')
             expression = expression.replace('^', '**')
             result = eval(expression)
-            if result == float('inf') or result == float('-inf'):
-                raise OverflowError("Бесконечность")
-            calc_entry.delete(0, END)
-            calc_entry.insert(END, str(result))
+            #if result == float('inf') or result == float('-inf'):
+#               raise OverflowError("Бесконечность")
+            #calc_entry.delete(0, END)
+            #calc_entry.insert(END, str(result))
         elif key in {'cos', 'sin', 'log', 'ln', 'n!', 'e', 'π', '√'}:
             expression = calc_entry.get()
             result = perform_unary_operation(key, expression)
