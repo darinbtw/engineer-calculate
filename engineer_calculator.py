@@ -2,7 +2,14 @@ from tkinter import Tk, END, messagebox, ttk, W, E, N, S
 import math
 
 def on_entry_key_press(event):
-    return 'break'  # Игнорировать ввод с клавиатуры
+    allowed_keys = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+                    '.', '+', '-', '*', '/', '^', '(', ')', '=', 'C', '%',
+                    'e', 'π', 'cos', 'sin', 'log', 'ln', 'n!', '√', '←', '\b'}
+
+    if event.char in allowed_keys:
+        return
+    else:
+        return 'break'
 
 def calc(key):
     try:
@@ -76,14 +83,14 @@ def perform_unary_operation(operation, value):
 
 root = Tk()
 root.title('Инженерный калькулятор')
-root.configure(bg='#CCCCCC')  # Задаем цвет фона
+root.configure(bg='#CCCCCC')
 
 style = ttk.Style()
 style.configure("TButton", padding=(10, 5), font=('Arial', 12))
 style.configure("TEntry", font=('Arial', 14))
 calc_entry = ttk.Entry(root, width=33)
 calc_entry.grid(row=0, column=0, columnspan=5, sticky=W + E + N + S, pady=10)
-calc_entry.bind('<Key>', on_entry_key_press)  # Привязываем событие Key к функции
+calc_entry.bind('<Key>', on_entry_key_press)
 
 for i in range(5):
     root.columnconfigure(i, weight=1)
