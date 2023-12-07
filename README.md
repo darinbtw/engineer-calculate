@@ -5,16 +5,14 @@
 Основные функции:
 *Арифметические операции: Сложение, вычитание, умножение, деление и другие основные арифметические операции.*
 
-*Тригонометрические функции: Синус, косинус, тангенс и их обратные функции.*
+*Тригонометрические функции: Синус, косинус*
 
-*Логарифмы и экспоненты: Возможность вычисления натуральных логарифмов, десятичных логарифмов, экспонент и др.*
-
-*Конвертеры единиц: Преобразование единиц измерения для удобства ввода и вывода данных.*
+*Логарифмы и экспоненты: Возможность вычисления натуральных логарифмов, десятичных логарифмов, экспонент*
 
 Дополнительные возможности:
 Графический интерфейс: Простой и интуитивно понятный пользовательский интерфейс для ввода данных и отображения результатов.
 
-Исходный код открыт для вклада: Мы приветствуем ваши предложения и улучшения. Не стесняйтесь создавать pull request'ы!
+Исходный код открыт для вклада: приветствуется ваши предложения и улучшения. Не стесняйтесь создавать pull request'ы!
 
 Автор:
 [Владислав Подъячев]
@@ -26,11 +24,9 @@ This project is an engineering calculator developed in the Python programming la
 
 Main functions: *Arithmetic operations: Addition, subtraction, multiplication, division and other basic arithmetic operations.*
 
-*Trigonometric functions: Sine, cosine, tangent and their inverse functions.*
+*Trigonometric functions: Sine, cosine*
 
-*Logarithms and exponents: The ability to calculate natural logarithms, decimal logarithms, exponents, etc.*
-
-*Unit Converters: Convert units of measurement for ease of data input and output.*
+*Logarithms and exponents: The ability to calculate natural logarithms*
 
 Additional features: Graphical interface: A simple and intuitive user interface for entering data and displaying results.
 
