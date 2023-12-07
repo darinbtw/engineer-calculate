@@ -85,7 +85,7 @@ root = Tk()
 root.title('Инженерный калькулятор')
 root.configure(bg='#CCCCCC')
 
-root.iconbitmap(r'C:\Users\Darin\Documents\GitHub\engineer-calculate\icon.ico')
+#root.iconbitmap(r'C:\Users\Darin\Documents\GitHub\engineer-calculate\icon.ico')
 
 style = ttk.Style()
 style.configure("TButton", padding=(10, 5), font=('Arial', 12))
