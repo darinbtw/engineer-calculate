@@ -15,7 +15,7 @@
 Исходный код открыт для вклада: приветствуется ваши предложения и улучшения. Не стесняйтесь создавать pull request'ы!
 
 Автор:
-[Владислав Подъячев]
+[darin_btw]
 
 Я надееюсь, что этот инженерный калькулятор станет полезным инструментом для ваших вычислительных задач. Благодарим за ваш интерес и ваши вклады в развитие проекта!
 
@@ -32,6 +32,6 @@ Additional features: Graphical interface: A simple and intuitive user interface 
 
 The source code is open for contribution: We welcome your suggestions and improvements. Feel free to create pull requests!
 
-Author: [Vladislav Podyachev]
+Author: [darin_btw]
 
 I hope this engineering calculator will become a useful tool for your computing tasks. Thank you for your interest and your contributions to the development of the project!
